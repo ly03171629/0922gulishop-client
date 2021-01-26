@@ -2,7 +2,9 @@
   <div>
     <Header></Header>
     <router-view></router-view>
-    <Footer></Footer>
+    <!-- 这样写是可以的，但是如果后期有很多的页面都不需要显示footer，那么这里面就会写很长 -->
+    <!-- <Footer v-show="$route.path !== '/login' && $route.path !== '/register'"></Footer> -->
+    <Footer v-show="!$route.meta.isHidden"></Footer>
   </div>
 </template>
 

@@ -42,8 +42,13 @@
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
+            v-model="keyword"
           />
-          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="toSearch">
+          <button
+            class="sui-btn btn-xlarge btn-danger"
+            type="button"
+            @click="toSearch"
+          >
             搜索
           </button>
         </form>
@@ -55,11 +60,61 @@
 <script>
 export default {
   name: "",
-  methods:{
-    toSearch(){
-      this.$router.push('/search')
-    }
-  }
+  data() {
+    return {
+      keyword: "",
+    };
+  },
+  methods: {
+    toSearch() {
+      //一、路由传参种类：params参数和query参数
+      // params参数是属于路径的一部分，路由当中匹配的时候，path路径是要照顾到这个参数的
+      // query 参数是在路径后面，以？分割 ，？后面的  a = b & c = d就是你的query参数
+      //query参数是不属于路径的一部分，路由匹配的时候，path路径不需要关心我这个参数
+      
+      //二、路由路径带参数的三种写法
+      // 1、字符串写法
+      // this.$router.push('/search/'+this.keyword + '?keyword1=' + this.keyword.toUpperCase())
+      // 2、模板字符串
+      // this.$router.push(`/search/${this.keyword}?keyword1=${this.keyword.toUpperCase()}`)
+      // 3、对象写法（重点）
+      // this.$router.push({
+      //   name: "search",
+      //   params: { keyword: this.keyword },
+      //   query: { keyword1: this.keyword.toUpperCase() },
+      // });
+
+      // 面试1
+      //指定params参数时可不可以用path和params配置的组合?（对象写法）
+      //如果传递的参数只有query参数，没有params参数，那么我们可以不用name,可以使用path
+      //如果传递的参数包含params参数，就不能使用path去配合，只能用name去配合
+      //对象写法，最好以后写name,因为name既能和params去配合也能和query去配合
+      //而path，只能和query去配合，不能和params配合
+
+      // this.$router.push({
+      //   // path:'/search',
+      //   name:'search',
+      //   params: { keyword: this.keyword },
+      //   query: { keyword1: this.keyword.toUpperCase() },
+      // });
+
+
+      // 面试2   如何让params参数可传可不传   路由配置path路径后面占位后+？
+
+      // 面试3   如果指定name与params配置, 但params中数据是一个"", 无法跳转，路径会出问题
+      // 1、不传params参数
+      // 2、首先必须在params参数可传可不传的前提下，当传递的参数是空串的时候，传递成undefined,就不出问题
+      this.$router.push({
+        name: "search",
+        params: { keyword: this.keyword || undefined},
+        query: { keyword1: this.keyword.toUpperCase() },
+      });
+
+      // 面试问题5: 路由组件能不能传递props数据?
+    	// 可以: 可以将query或且params参数映射/转换成props传递给路由组件对象
+		  // 实现: props: (route)=>({keyword1:route.params.keyword, keyword2: route.query.keyword })
+    },
+  },
 };
 </script>
 
