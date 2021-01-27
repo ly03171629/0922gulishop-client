@@ -19,6 +19,7 @@
 //   }
 // })
 
+import axios from 'axios'
 import request from './ajax'
 //请求三级分类列表数据
 ///api/product/getBaseCategoryList
@@ -30,6 +31,8 @@ export const reqCategoryList = () => {
     method:'get'
   })
 }
+
+
 
 //验证请求是否成功
 // reqCategoryList()    //这里如果要调用，得把模块引入到main当中

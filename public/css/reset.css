@@ -62,7 +62,7 @@ hr {
 /* 让非ie浏览器默认也显示垂直滚动条，防止因滚动条引起的闪烁 */
 html { overflow-y: scroll; }
 
-a:link:hover{
+a:hover{
     color : rgb(79, 76, 212) !important;
     text-decoration: underline;
 }
