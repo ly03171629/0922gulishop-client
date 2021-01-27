@@ -112,7 +112,19 @@ export default {
 
       // 面试问题5: 路由组件能不能传递props数据?
     	// 可以: 可以将query或且params参数映射/转换成props传递给路由组件对象
-		  // 实现: props: (route)=>({keyword1:route.params.keyword, keyword2: route.query.keyword })
+      // 实现: props: (route)=>({keyword1:route.params.keyword, keyword2: route.query.keyword })
+      
+
+      // 面试6 ，vue-router使用的是3.1.0以上的版本，如果多次点击使用编程式导航，而参数没发生变化
+      //会报NavigationDuplicated的警告错误
+      //解决1，但是不好
+      // this.$router.push({
+      //   name: "search",
+      //   params: { keyword: this.keyword || undefined},
+      //   query: { keyword1: this.keyword.toUpperCase() },
+      // }).catch(() => {});
+
+      //解决2，修改路由器对象，原型的方法
     },
   },
 };
