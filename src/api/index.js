@@ -19,7 +19,6 @@
 //   }
 // })
 
-import axios from 'axios'
 import request from './ajax'
 //请求三级分类列表数据
 ///api/product/getBaseCategoryList
