@@ -17,7 +17,11 @@ export default {
   components:{
     Header,
     Footer
-  }
+  },
+  mounted() {
+    //在这发请求去获取三级分类的数据，那么就只会发一次，而且一次就够了，因为数据不变
+    this.$store.dispatch("getCategoryList");
+  },
 }
 </script>
 

@@ -104,11 +104,20 @@ export default {
       // 面试3   如果指定name与params配置, 但params中数据是一个"", 无法跳转，路径会出问题
       // 1、不传params参数
       // 2、首先必须在params参数可传可不传的前提下，当传递的参数是空串的时候，传递成undefined,就不出问题
-      this.$router.push({
+
+
+      let location = {
         name: "search",
         params: { keyword: this.keyword || undefined},
-        query: { keyword1: this.keyword.toUpperCase() },
-      });
+        // query: { keyword1: this.keyword.toUpperCase() },
+      }
+
+      //跳转之前一样的，也得判断之前过来有没有带query参数，有的话这次一起带上（合并参数）
+      if(this.$route.query){
+        location.query = this.$route.query
+      }
+
+      this.$router.push(location);
 
       // 面试问题5: 路由组件能不能传递props数据?
     	// 可以: 可以将query或且params参数映射/转换成props传递给路由组件对象
