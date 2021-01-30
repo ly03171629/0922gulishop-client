@@ -20,6 +20,7 @@
 // })
 
 import request from './ajax'
+import mockAjax from '@/api/mockAjax'
 //请求三级分类列表数据
 ///api/product/getBaseCategoryList
 //get
@@ -37,4 +38,19 @@ export const reqCategoryList = () => {
 // reqCategoryList()    //这里如果要调用，得把模块引入到main当中
 
 
+//请求获取模拟接口的数据banner和floor
 
+export const reqBannerList = () => {
+  return mockAjax({
+    url:'/banner',
+    method:'get'
+  })
+}
+
+
+export const reqFloorList = () => {
+  return mockAjax({
+    url:'/floor',
+    method:'get'
+  })
+}

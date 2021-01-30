@@ -3,6 +3,8 @@ import App from '@/App'
 import router from '@/router'
 import store from '@/store'
 
+import '@/mock/mockServer'  //引入mockServer，让模拟的接口生效
+
 // import '@/api'
 
 //第二种测试接口请求函数方式
