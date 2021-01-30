@@ -4,19 +4,26 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <!-- <div class="swiper-container" ref="bannerSwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="(banner,index) in bannerList" :key="banner.id">
+            <div
+              class="swiper-slide"
+              v-for="(banner, index) in bannerList"
+              :key="banner.id"
+            >
               <img :src="banner.imgUrl" />
             </div>
-          </div>
+          </div> -->
+
           <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
+          <!-- <div class="swiper-pagination"></div> -->
 
           <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+          <!-- <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div> -->
+
+          <SlideLoop :bannerList="bannerList"></SlideLoop>
+        <!-- </div> -->
       </div>
       <div class="right">
         <div class="news">
@@ -92,17 +99,111 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
+// import Swiper from "swiper"; //引入swiper的js
+// import 'swiper/css/swiper.css' //引入swiper的css,一般是直接在main里面引入
+
 export default {
   name: "",
-  mounted(){
-    this.$store.dispatch('getBannerList')
+  mounted() {
+    this.$store.dispatch("getBannerList"); //异步代码
+    //一、挂载完成以后去实例化swiper
+    //这样是不行的，因为实例化的时候，页面显示还不一定成功
+    //按道理来说挂载完成，页面的dom结构就算形成完成，在此去实例化应该是可以的。
+    //但是，我们大家看清，这个页面当中结构中的swiper-slide，是根据请求回来的数据，动态创建生成的
+    //所以，我们必须得保证请求数据回来之后，再去实例化，有了数据，slide的div才会动态创建ok
+
+    //同步代码，首先执行，它是在最终结构形成之前就实例化了，所以搞不定
+    // new Swiper(".swiper-container", {
+    //   // direction: "vertical", // 垂直切换选项，去掉就代表轮播是水平的
+
+    //   loop: true, // 循环模式选项   无缝的开关
+
+    //   // 如果需要分页器      小圆点
+    //   pagination: {
+    //     el: ".swiper-pagination",
+    //   },
+
+    //   // 如果需要前进后退按钮
+    //   navigation: {
+    //     nextEl: ".swiper-button-next",
+    //     prevEl: ".swiper-button-prev",
+    //   },
+
+    //   // 如果需要滚动条
+    //   // scrollbar: {
+    //   //   el: ".swiper-scrollbar",
+    //   // },
+    // });
+
+    // 二、上面搞不定，我们就要想办法搞定，最简单的办法就是定时器,但是用这个方法不完美
+    // setTimeout(() => {
+    //   new Swiper(this.$refs.bannerSwiper, {
+    //     // direction: "vertical", // 垂直切换选项，去掉就代表轮播是水平的
+
+    //     loop: true, // 循环模式选项   无缝的开关
+
+    //     // 如果需要分页器      小圆点
+    //     pagination: {
+    //       el: ".swiper-pagination",
+    //     },
+
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev",
+    //     },
+
+    //     // 如果需要滚动条
+    //     // scrollbar: {
+    //     //   el: ".swiper-scrollbar",
+    //     // },
+    //   });
+    // }, 2000);
   },
-  computed:{
+  computed: {
     ...mapState({
-      bannerList:state => state.home.bannerList
-    })
-  }
+      bannerList: (state) => state.home.bannerList,
+    }),
+  },
+
+  // watch: {
+  //   bannerList: {
+  //     immediate:true,
+  //     handler(newVal, oldVal) {
+  //       //当数据一旦有变化，那么我们就去实例化swiper,但是发现不行
+  //       //我们就得考虑是不是页面还是没形成呢？答案是肯定的，也就说有了数据，上面页面才开始v-for形成结构
+  //       //得等结构完全形成之后再去实例化
+
+  //       //在最近的一次页面更新完成之后，执行nextTick当中传递的回调函数
+  //       // nextTick是页面最近的一次更新完成之后才会执行
+  //       // updated 是只要页面有数据更新，那么就会执行，执行不关心是不是最近一次更新
+  //       this.$nextTick(() => {
+  //         new Swiper(this.$refs.bannerSwiper, {
+  //           // direction: "vertical", // 垂直切换选项，去掉就代表轮播是水平的
+
+  //           loop: true, // 循环模式选项   无缝的开关
+
+  //           // 如果需要分页器      小圆点
+  //           pagination: {
+  //             el: ".swiper-pagination",
+  //           },
+
+  //           // 如果需要前进后退按钮
+  //           navigation: {
+  //             nextEl: ".swiper-button-next",
+  //             prevEl: ".swiper-button-prev",
+  //           },
+
+  //           // 如果需要滚动条
+  //           // scrollbar: {
+  //           //   el: ".swiper-scrollbar",
+  //           // },
+  //         });
+  //       });
+  //     },
+  //   },
+  // },
 };
 </script>
 
