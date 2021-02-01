@@ -4,6 +4,7 @@ Vue.use(Vuex)
 
 import user from './user'
 import home from './home'
+import search from './search'
 
 
 //vuex当中的4个核心概念  
@@ -35,6 +36,7 @@ export default new Vuex.Store({
   // modules代表模块化
   modules:{
     user,
-    home
+    home,
+    search
   }
 })

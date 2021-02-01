@@ -54,3 +54,23 @@ export const reqFloorList = () => {
     method:'get'
   })
 }
+
+//请求获取search页面的数据
+// /api/list
+// post
+// 请求体参数，一个对象
+export const reqSearchInfo = (searchParams) => {
+  return request({
+    url:'/list',
+    method:'post',
+    data:searchParams//searchParams是用户搜索的参数，这个参数是用户在发请求的时候给传递的
+  })
+}
+//这个请求参数，searchParams必须是一个对象，可以是空对象，但是必须传，不能不传
+//其实用户发请求的时候，这个参数给空对象{}，也是可以获取到数据的，代表获取商品默认搜索的数据
+// 测试
+// reqSearchInfo({})
+
+
+
+
