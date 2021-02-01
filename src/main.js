@@ -12,15 +12,11 @@ import '@/mock/mockServer'  //引入mockServer，让模拟的接口生效
 //第二种测试接口请求函数方式
 // import {reqCategoryList} from '@/api'
 // reqCategoryList()
-
-
 import TypeNav from '@/components/TypeNav'
 import SlideLoop from  '@/components/SlideLoop'
 //全局注册的组件，如果一个非路由组件被多个组件使用，那么定义在components，注册在全局
 Vue.component('TypeNav',TypeNav)
 Vue.component('SlideLoop',SlideLoop)
-
-
 
 // @是一个别名，是个小名  代表的就是我们的src的路径
 Vue.config.productionTip = false
@@ -35,6 +31,9 @@ Vue.config.productionTip = false
 // }).$mount('#app')
 
 new Vue({
+  beforeCreate(){
+    Vue.prototype.$bus = this   //安装总线  代表任意组件内部都可以通过this.$bus访问到vm实例（总线）
+  },
   el:'#app',
   render: h => h(App),
   router,  //我们所有的组件内部都可以使用this.$router和this.$route

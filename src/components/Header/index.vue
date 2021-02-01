@@ -65,6 +65,11 @@ export default {
       keyword: "",
     };
   },
+
+  mounted(){
+    this.$bus.$on('clearKeyword',this.clearKeyword)
+  },
+
   methods: {
     toSearch() {
       //一、路由传参种类：params参数和query参数
@@ -135,6 +140,10 @@ export default {
 
       //解决2，修改路由器对象，原型的方法
     },
+
+    clearKeyword(){
+      this.keyword = ''
+    }
   },
 };
 </script>
