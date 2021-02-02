@@ -66,8 +66,8 @@ export default {
     };
   },
 
-  mounted(){
-    this.$bus.$on('clearKeyword',this.clearKeyword)
+  mounted() {
+    this.$bus.$on("clearKeyword", this.clearKeyword);
   },
 
   methods: {
@@ -76,7 +76,7 @@ export default {
       // params参数是属于路径的一部分，路由当中匹配的时候，path路径是要照顾到这个参数的
       // query 参数是在路径后面，以？分割 ，？后面的  a = b & c = d就是你的query参数
       //query参数是不属于路径的一部分，路由匹配的时候，path路径不需要关心我这个参数
-      
+
       //二、路由路径带参数的三种写法
       // 1、字符串写法
       // this.$router.push('/search/'+this.keyword + '?keyword1=' + this.keyword.toUpperCase())
@@ -103,31 +103,34 @@ export default {
       //   query: { keyword1: this.keyword.toUpperCase() },
       // });
 
-
       // 面试2   如何让params参数可传可不传   路由配置path路径后面占位后+？
 
       // 面试3   如果指定name与params配置, 但params中数据是一个"", 无法跳转，路径会出问题
       // 1、不传params参数
       // 2、首先必须在params参数可传可不传的前提下，当传递的参数是空串的时候，传递成undefined,就不出问题
 
-
       let location = {
         name: "search",
-        params: { keyword: this.keyword || undefined},
+        params: { keyword: this.keyword || undefined },
         // query: { keyword1: this.keyword.toUpperCase() },
-      }
+      };
 
       //跳转之前一样的，也得判断之前过来有没有带query参数，有的话这次一起带上（合并参数）
-      if(this.$route.query){
-        location.query = this.$route.query
+      if (this.$route.query) {
+        location.query = this.$route.query;
       }
 
-      this.$router.push(location);
+      //如果是从home页跳search页，就push
+      //如果是search页跳search页，就replace
+      if (this.$route.path !== "/home") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
 
       // 面试问题5: 路由组件能不能传递props数据?
-    	// 可以: 可以将query或且params参数映射/转换成props传递给路由组件对象
+      // 可以: 可以将query或且params参数映射/转换成props传递给路由组件对象
       // 实现: props: (route)=>({keyword1:route.params.keyword, keyword2: route.query.keyword })
-      
 
       // 面试6 ，vue-router使用的是3.1.0以上的版本，如果多次点击使用编程式导航，而参数没发生变化
       //会报NavigationDuplicated的警告错误
@@ -141,9 +144,9 @@ export default {
       //解决2，修改路由器对象，原型的方法
     },
 
-    clearKeyword(){
-      this.keyword = ''
-    }
+    clearKeyword() {
+      this.keyword = "";
+    },
   },
 };
 </script>

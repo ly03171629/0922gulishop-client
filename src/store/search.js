@@ -40,7 +40,6 @@ const getters = {
   trademarkList(state){
     return state.searchInfo.trademarkList || []
   }
-
 }
 
 export default {

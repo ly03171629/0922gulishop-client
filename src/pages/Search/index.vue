@@ -12,46 +12,72 @@
           </ul>
           <ul class="fl sui-tag">
             <li class="with-x" v-if="searchParams.categoryName">
-              {{ searchParams.categoryName }}<i @click="removeCategoryName">×</i>
+              {{ searchParams.categoryName
+              }}<i @click="removeCategoryName">×</i>
             </li>
             <li class="with-x" v-if="searchParams.keyword">
               {{ searchParams.keyword }}<i @click="removeKeyword">×</i>
             </li>
             <li class="with-x" v-if="searchParams.trademark">
-              {{ searchParams.trademark.split(':')[1] }}<i @click="removeTrademark">×</i>
+              {{ searchParams.trademark.split(":")[1]
+              }}<i @click="removeTrademark">×</i>
             </li>
 
-            <li class="with-x" v-for="(prop, index) in searchParams.props" :key="prop">
-              {{ prop.split(':')[1] }}<i @click="removeProp(index)">×</i>
+            <li
+              class="with-x"
+              v-for="(prop, index) in searchParams.props"
+              :key="prop"
+            >
+              {{ prop.split(":")[1] }}<i @click="removeProp(index)">×</i>
             </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @searchForTrademark="searchForTrademark" @searchForProps="searchForProps"/>
+        <SearchSelector
+          @searchForTrademark="searchForTrademark"
+          @searchForProps="searchForProps"
+        />
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
+              <!-- 第一步：先把背景色动态显示搞定 -->
+              <!-- 第二步：再让图标可以动态显示 
+              //1、用啥图标
+              //2、图标什么时候出现    和背景色一样，谁有背景色，那么谁就有图标
+              //3、图标是向上还是向下  和数据排序类型相关asc和desc
+              -->
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <!-- <li
+                  :class="{ active: searchParams.order.split(':')[0] === '1' }"
+                > -->
+                <li :class="{ active: sortFlag === '1' }">
+                  <a href="javascript:;" @click="changeSort('1')">
+                    综合
+                    <i
+                      v-if="sortFlag === '1'"
+                      class="iconfont"
+                      :class="{
+                        icondown: sortType === 'desc',
+                        iconup: sortType === 'asc',
+                      }"
+                    ></i>
+                  </a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: sortFlag === '2' }">
+                  <a href="javascript:;" @click="changeSort('2')">
+                    价格
+                    <i
+                      v-if="sortFlag === '2'"
+                      class="iconfont"
+                      :class="{
+                        icondown: sortType === 'desc',
+                        iconup: sortType === 'asc',
+                      }"
+                    ></i>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -159,7 +185,7 @@ export default {
         trademark: "",
 
         // 默认的搜索条件
-        order: "1:desc", //排序规则，排序是后台排序的，我们搜索的时候得给后台一个默认的排序规则
+        order: "2:asc", //排序规则，排序是后台排序的，我们搜索的时候得给后台一个默认的排序规则
         pageNo: 1, //搜素第几页的商品，分页也是后台做好的，我们也是得告诉后台我们要第几页数据
         pageSize: 10, //每页多少个商品，告诉后台，每页回来多少个商品 默认10个
       },
@@ -226,54 +252,76 @@ export default {
         keyword,
       }; //这样可以保证 searchParams；里面一定包含了我点击传递过来的搜索条件，没有就是undefined
 
+      //赋值给this.searchParams之前，最好是把属性值为空串的属性干掉
+      // for循环   for..in   forEach  for...of
+      // for循环是js当中最简单的遍历方法  主要是针对数组进行遍历的，效率不高，但是可以使用continue和break
+      // for..in 循环主要是用来遍历对象的（遍历对象的可枚举属性的） 效率最低，原因是因为不但要遍历自身的属性还要遍历原型的
+      // forEach 是数组的一个方法，主要页是用来遍历数组的，效率最高，但是不可以使用continue和break
+      // for..of 是es6里面新加的一种遍历方法（前提必须是可迭代对象），效率没有forEach高（比其它的要高），也可以使用
+      //可以使用continue和break，for..of只能针对可迭代对象
+
+      //遍历对象最快的方法也是使用forEach 是把对象属性转化为数组然后进行遍历
+      //Object.keys(searchParams) 是把一个对象转化为数组，这个数组当中存储的是这个对象所有的属性
+      // let obj = {
+      //   name:'zhaoliying',
+      //   age:33,
+      //   height:168
+      // }
+      // Object.keys(obj)   // ['name','age','height']
+      // 只要以后大家看到这样的东西Object.keys(searchParams)，就是为了让对象可以使用forEach方法来高效去遍历
+      Object.keys(searchParams).forEach((key) => {
+        if (searchParams[key] === "") {
+          delete searchParams[key];
+        }
+      });
       this.searchParams = searchParams;
     },
     // 删除分类名称搜索条件，重新发送请求
-    removeCategoryName(){
-      this.searchParams.category3Id = undefined
-      this.searchParams.category2Id = undefined
-      this.searchParams.category1Id = undefined
-      this.searchParams.categoryName = undefined
-      // this.getSearchInfo();  
+    removeCategoryName() {
+      this.searchParams.category3Id = undefined;
+      this.searchParams.category2Id = undefined;
+      this.searchParams.category1Id = undefined;
+      this.searchParams.categoryName = undefined;
+      // this.getSearchInfo();
       //这里删除以后不会动我的原来路径，所以这样发请求不行，我们得让路径发生变化
-      this.$router.push({name:'search',params:this.$route.params})//目的是让路径变化
+      // this.$router.push({name:'search',params:this.$route.params})//目的是让路径变化
+      this.$router.replace({ name: "search", params: this.$route.params }); //目的是让路径变化
 
       //然后路径变化了为什么就发送请求了，而且参数也对了呢
       // 这里发请求依赖的是监视里面的代码
-
     },
     // 删除关键字搜索条件，重新发送请求
-    removeKeyword(){
-      this.searchParams.keyword = undefined
-      this.$bus.$emit('clearKeyword')  //通知header组件清空关键字
+    removeKeyword() {
+      this.searchParams.keyword = undefined;
+      this.$bus.$emit("clearKeyword"); //通知header组件清空关键字
       // this.getSearchInfo();
-      this.$router.push({name:'search',query:this.$route.query})
+      this.$router.replace({ name: "search", query: this.$route.query });
 
-       //然后路径变化了为什么就发送请求了，而且参数也对了呢
+      //然后路径变化了为什么就发送请求了，而且参数也对了呢
       // 这里发请求依赖的是监视里面的代码
     },
 
     // 用户点击品牌后，根据品牌搜索重新发送请求
-    searchForTrademark(trademark){
+    searchForTrademark(trademark) {
       // trademark最终参数的样子要去参考接口文档
-      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`
+      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
       this.getSearchInfo();
     },
 
     // 删除品牌搜索条件后，重新发送请求
-    removeTrademark(){
-      this.searchParams.trademark = undefined
+    removeTrademark() {
+      this.searchParams.trademark = undefined;
       this.getSearchInfo();
     },
     //用户点击平台属性值，根据平台属性搜索重新发送请求
-    searchForProps(attrValue,attr){
-      let prop = `${attr.attrId}:${attrValue}:${attr.attrName}`
+    searchForProps(attrValue, attr) {
+      let prop = `${attr.attrId}:${attrValue}:${attr.attrName}`;
 
       //你得判断数组当中是否已经存在当前这个属性，如果有了就不要再去发请求了
       //数组方法（高级方法）
-      // every some         reduce   filter  map 
+      // every some  reduce   filter  map
       // 功能 参数  返回值
-      // some 
+      // some
       // 功能： 只要数组当中有一个和条件一样，返回true  如果都没有，false
       // 参数： 参考filter回调函数
       // 返回值： 返回布尔值
@@ -283,25 +331,56 @@ export default {
       // 参数： 参考filter
       // 返回值： 返回布尔值
 
-      let isRepeate = this.searchParams.props.some(item => item === prop)
-      if(isRepeate){
+      let isRepeate = this.searchParams.props.some((item) => item === prop);
+
+      if (isRepeate) {
         //证明已经存在这个属性，发过请求了，就别再继续发了
-        return 
+        return;
       }
 
-      this.searchParams.props.push(prop)
+      this.searchParams.props.push(prop);
       this.getSearchInfo();
     },
     //用户删除某个属性值搜索条件，重新发送请求
-    removeProp(index){
-      this.searchParams.props.splice(index,1)
+    removeProp(index) {
+      this.searchParams.props.splice(index, 1);
       this.getSearchInfo();
-    }
-  }
-  ,
+    },
+    //点击综合或者价格的排序回调
+    changeSort(sortFlag) {
+      //首先我们得判断用户点击的是不是和原来的排序标志一样
+      //获取到原来的排序标志和排序类型
+      // let originSortFlag = this.searchParams.order.split(":")[0];
+      // let originSortType = this.searchParams.order.split(":")[1];
+      let originSortFlag = this.sortFlag;
+      let originSortType = this.sortType;
+      let newOrder = "";
+      //判断用户点击的是不是还是原来的
+      if (sortFlag === originSortFlag) {
+        //假设用户点击的排序标志和原来的是一样的，证明点击的还是同一个排序，那么我们需要把排序类型改变
+        newOrder = `${originSortFlag}:${
+          originSortType === "asc" ? "desc" : "asc"
+        }`;
+      } else {
+        //假设用户点击的排序标志和原来的是不一样的，证明点击的不是同一个排序，那么我们需要把排序标志改变，排序类型默认
+        newOrder = `${sortFlag}:desc`;
+      }
 
+      this.searchParams.order = newOrder; //把排序规则的数据修改
+
+      this.getSearchInfo(); //重新发送请求获取新排序的数据显示
+    },
+  },
   computed: {
     ...mapGetters(["goodsList"]),
+
+    //优化代码
+    sortFlag() {
+      return this.searchParams.order.split(":")[0];
+    },
+    sortType() {
+      return this.searchParams.order.split(":")[1];
+    },
   },
 
   //解决search页面改变参数，无法重复发请求的问题

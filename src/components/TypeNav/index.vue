@@ -247,7 +247,13 @@ export default {
           location.params = this.$route.params
         }
 
-        this.$router.push(location);
+        //如果是从home页跳search页，就push
+        //如果是search页跳search页，就replace
+        if(this.$route.path !== '/home'){
+          this.$router.replace(location);
+        }else{
+          this.$router.push(location);
+        }
       }
     },
 
