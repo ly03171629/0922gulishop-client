@@ -127,35 +127,14 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <Pagination
+            :currentPageNo="searchParams.pageNo"
+            :total="searchInfo.total"
+            :pageSize="searchParams.pageSize"
+            :continueNo="5"
+            @changePageNo="changePageNo"
+          ></Pagination>
+          
         </div>
       </div>
     </div>
@@ -163,7 +142,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
@@ -187,7 +166,7 @@ export default {
         // 默认的搜索条件
         order: "2:asc", //排序规则，排序是后台排序的，我们搜索的时候得给后台一个默认的排序规则
         pageNo: 1, //搜素第几页的商品，分页也是后台做好的，我们也是得告诉后台我们要第几页数据
-        pageSize: 10, //每页多少个商品，告诉后台，每页回来多少个商品 默认10个
+        pageSize: 3, //每页多少个商品，告诉后台，每页回来多少个商品 默认10个
       },
     };
   },
@@ -274,6 +253,7 @@ export default {
           delete searchParams[key];
         }
       });
+
       this.searchParams = searchParams;
     },
     // 删除分类名称搜索条件，重新发送请求
@@ -285,6 +265,9 @@ export default {
       // this.getSearchInfo();
       //这里删除以后不会动我的原来路径，所以这样发请求不行，我们得让路径发生变化
       // this.$router.push({name:'search',params:this.$route.params})//目的是让路径变化
+
+      this.searchParams.pageNo = 1
+
       this.$router.replace({ name: "search", params: this.$route.params }); //目的是让路径变化
 
       //然后路径变化了为什么就发送请求了，而且参数也对了呢
@@ -295,6 +278,7 @@ export default {
       this.searchParams.keyword = undefined;
       this.$bus.$emit("clearKeyword"); //通知header组件清空关键字
       // this.getSearchInfo();
+      this.searchParams.pageNo = 1
       this.$router.replace({ name: "search", query: this.$route.query });
 
       //然后路径变化了为什么就发送请求了，而且参数也对了呢
@@ -305,12 +289,14 @@ export default {
     searchForTrademark(trademark) {
       // trademark最终参数的样子要去参考接口文档
       this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
+      this.searchParams.pageNo = 1
       this.getSearchInfo();
     },
 
     // 删除品牌搜索条件后，重新发送请求
     removeTrademark() {
       this.searchParams.trademark = undefined;
+      this.searchParams.pageNo = 1
       this.getSearchInfo();
     },
     //用户点击平台属性值，根据平台属性搜索重新发送请求
@@ -337,13 +323,14 @@ export default {
         //证明已经存在这个属性，发过请求了，就别再继续发了
         return;
       }
-
+      this.searchParams.pageNo = 1
       this.searchParams.props.push(prop);
       this.getSearchInfo();
     },
     //用户删除某个属性值搜索条件，重新发送请求
     removeProp(index) {
       this.searchParams.props.splice(index, 1);
+      this.searchParams.pageNo = 1
       this.getSearchInfo();
     },
     //点击综合或者价格的排序回调
@@ -366,14 +353,24 @@ export default {
         newOrder = `${sortFlag}:desc`;
       }
 
-      this.searchParams.order = newOrder; //把排序规则的数据修改
 
+
+      this.searchParams.order = newOrder; //把排序规则的数据修改
+      this.searchParams.pageNo = 1
       this.getSearchInfo(); //重新发送请求获取新排序的数据显示
     },
+
+    //分页器点击切换页码的时候，触发的自定义事件回调
+    changePageNo(page){
+      this.searchParams.pageNo = page
+      this.getSearchInfo()
+    }
   },
   computed: {
     ...mapGetters(["goodsList"]),
-
+    ...mapState({
+      searchInfo: (state) => state.search.searchInfo,
+    }),
     //优化代码
     sortFlag() {
       return this.searchParams.order.split(":")[0];
