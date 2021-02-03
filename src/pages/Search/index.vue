@@ -56,6 +56,8 @@
                 <li :class="{ active: sortFlag === '1' }">
                   <a href="javascript:;" @click="changeSort('1')">
                     综合
+
+                    <!-- 钩子标签，i标签其实就代表是我们的图标 -->
                     <i
                       v-if="sortFlag === '1'"
                       class="iconfont"
@@ -91,9 +93,14 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
+                      
+                    <router-link :to="'/detail/'+goods.id">
                       <img :src="goods.defaultImg" />
-                    </a>
+                    </router-link>
+
+                    <!-- <a href="item.html" target="_blank">
+                      <img :src="goods.defaultImg" />
+                    </a> -->
                   </div>
                   <div class="price">
                     <strong>
@@ -102,12 +109,16 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
+
+                    <router-link :to="'/detail/'+goods.id">
+                      {{ goods.title }}
+                    </router-link>
+                    <!-- <a
                       target="_blank"
                       href="item.html"
                       title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >Apple苹果iPhone {{ goods.title }}</a
-                    >
+                      > {{ goods.title }}</a
+                    > -->
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -132,9 +143,15 @@
             :total="searchInfo.total"
             :pageSize="searchParams.pageSize"
             :continueNo="5"
+
             @changePageNo="changePageNo"
           ></Pagination>
-          
+          <!-- element-ui -->
+          <!-- <el-pagination
+            layout="prev, pager, next"
+            :total="50">
+          </el-pagination> -->
+
         </div>
       </div>
     </div>
@@ -164,7 +181,7 @@ export default {
         trademark: "",
 
         // 默认的搜索条件
-        order: "2:asc", //排序规则，排序是后台排序的，我们搜索的时候得给后台一个默认的排序规则
+        order: "2:desc", //排序规则，排序是后台排序的，我们搜索的时候得给后台一个默认的排序规则
         pageNo: 1, //搜素第几页的商品，分页也是后台做好的，我们也是得告诉后台我们要第几页数据
         pageSize: 3, //每页多少个商品，告诉后台，每页回来多少个商品 默认10个
       },

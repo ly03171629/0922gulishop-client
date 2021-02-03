@@ -37,7 +37,10 @@ export default {
     currentPageNo: Number,
     total: {
       type: Number,
-      default: 0,
+      default: 0, 
+      //必须给一个默认值，否则会报一个错误，说total是undefined
+      //searchInfo是根据请求回来的数据，请求回来的数据是需要时间的
+      //当searchInfo没回来的时候就是空对象，因此传递过来就是undefiend
     },
     pageSize: {
       type: Number,
@@ -69,6 +72,8 @@ export default {
         //正常情况
         start = currentPageNo - Math.floor(continueNo / 2);
         end = currentPageNo + Math.floor(continueNo / 2);
+
+        
         //非正常情况
         if (start <= 0) {
           //再左侧非正常情况，需要把计算的start和end修正一下

@@ -73,4 +73,27 @@ export const reqSearchInfo = (searchParams) => {
 
 
 
+// 请求获取详情数据
+///api/item/{ skuId }
+//get
+
+export const reqDetailInfo = (skuId) => {
+  return request({
+    url:`/item/${ skuId }`,
+    method:'get'
+  })
+}
+
+// 请求添加购物车（修改购物车的商品数量）
+// /api/cart/addToCart/{ skuId }/{ skuNum }
+// POST
+
+export const reqAddOrUpdateShopCart = (skuId,skuNum) => {
+  return request({
+    url:`/cart/addToCart/${ skuId }/${ skuNum }`,
+    method:'post'
+  })
+}
+
+
 
