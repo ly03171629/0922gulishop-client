@@ -96,4 +96,16 @@ export const reqAddOrUpdateShopCart = (skuId,skuNum) => {
 }
 
 
+//请求获取购物车页面数据
+// /api/cart/cartList
+// get
+
+export const reqshopCartInfo = () => {
+  return request({
+    url:'/cart/cartList',
+    method:'get'
+  })
+}
+
+
 
