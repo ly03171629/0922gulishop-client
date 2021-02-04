@@ -87,7 +87,6 @@ export const reqDetailInfo = (skuId) => {
 // 请求添加购物车（修改购物车的商品数量）
 // /api/cart/addToCart/{ skuId }/{ skuNum }
 // POST
-
 export const reqAddOrUpdateShopCart = (skuId,skuNum) => {
   return request({
     url:`/cart/addToCart/${ skuId }/${ skuNum }`,
@@ -106,6 +105,23 @@ export const reqshopCartInfo = () => {
     method:'get'
   })
 }
+
+
+//请求修改购物车选中状态
+///api/cart/checkCart/{skuId}/{isChecked}
+// GET
+export const reqUpdateCartIscheck = (skuId,isChecked) => {
+  return request({
+    url:`/cart/checkCart/${skuId}/${isChecked}`,
+    method:'get'
+  })
+}
+
+
+
+
+
+
 
 
 
