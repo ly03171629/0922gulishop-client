@@ -1,6 +1,6 @@
 //这个是shopcart模块的vuex模块
 
-import { reqAddOrUpdateShopCart,reqshopCartInfo, reqUpdateCartIscheck } from "@/api"
+import { reqAddOrUpdateShopCart,reqshopCartInfo, reqUpdateCartIscheck,reqDeleteShopCart } from "@/api"
 
 //vuex当中的4个核心概念  
 const state = {
@@ -89,7 +89,13 @@ const actions = {
   //新的promise对象成功的结果：是参数promise对象数组当中每个promise对象成功的结果组成的数组
   //新的promise对象失败的结果：是参数promise对象数组当中第一个失败的promise对象失败的原因
 
-  updateCartIscheckAll({commit,getters,dispatch},isChecked){
+
+  //没有添加async  updateCartIscheckAll返回的是Promise.all(promises)返回的新promise
+  //添加了async updateCartIscheckAll返回的是异步函数返回的promise
+  //虽然添加不添加async 返回不是同一个promise，但是最终结果是一样
+  //原因是，async函数返回的promise，最终成功和失败看的是return的Promise.all(promises)返回的promise
+
+  async updateCartIscheckAll({commit,getters,dispatch},isChecked){
     let promises = []
     // getters.cartInfo.cartInfoList  获取到的就是我们的购物车列表数据
     getters.cartInfo.cartInfoList.forEach(item => {
@@ -97,6 +103,27 @@ const actions = {
       //拿一个数据提交给上面修改单个的接口去处理
       //也就是说本质还是通过修改单个的去修改多个的，只是采用了Promise.all一次处理
       let promise = dispatch('updateCartIscheck',{skuId:item.skuId,isChecked})
+      promises.push(promise)
+    })
+    return Promise.all(promises)
+  },
+
+  //删除单个
+  async deleteShopCart({commit},skuId){
+    const result = await reqDeleteShopCart(skuId)
+    if(result.code === 200){
+      return 'ok'
+    }else{
+      return Promise.reject(new Error('failed'))
+    }
+  },
+
+  //删除多个
+  deleteShopCartAll({commit,getters,dispatch}){
+    let promises = []
+    getters.cartInfo.cartInfoList.forEach(item => {
+      if(!item.isChecked) return 
+      let promise = dispatch('deleteShopCart',item.skuId)
       promises.push(promise)
     })
     return Promise.all(promises)

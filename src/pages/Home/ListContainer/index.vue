@@ -102,7 +102,6 @@
 import { mapState } from "vuex";
 // import Swiper from "swiper"; //引入swiper的js
 // import 'swiper/css/swiper.css' //引入swiper的css,一般是直接在main里面引入
-
 export default {
   name: "",
   mounted() {
@@ -278,7 +277,7 @@ export default {
           width: 25%;
 
           .list-item {
-            background-image: url(./images/icons.png);
+            background-image: url(~@/assets/images/icons.png);
             width: 61px;
             height: 40px;
             display: block;

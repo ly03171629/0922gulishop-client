@@ -118,6 +118,47 @@ export const reqUpdateCartIscheck = (skuId,isChecked) => {
 }
 
 
+//请求删除购物车数据
+///api/cart/deleteCart/{skuId}
+//DELETE
+
+export const reqDeleteShopCart = (skuId) => {
+  return request({
+    url:`/cart/deleteCart/${skuId}`,
+    method:'delete'
+  })
+}
+
+
+//请求注册用户
+///api/user/passport/register
+//post
+//参数：请求体  code  phone  password
+
+
+export const reqUserRegister = (userInfo) => {
+  return request({
+    url:'/user/passport/register',
+    method:'post',
+    data:userInfo
+  })
+}
+
+//请求获取用户注册验证码
+///api/user/passport/sendCode/{phone}
+//get
+export const reqGetCode = (phone) => {
+  return request({
+    url:`/user/passport/sendCode/${phone}`,
+    method:'get'
+  })
+}
+
+
+
+
+
+
 
 
 
