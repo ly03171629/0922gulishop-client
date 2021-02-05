@@ -155,6 +155,52 @@ export const reqGetCode = (phone) => {
 }
 
 
+//请求用户登录
+///api/user/passport/login
+//post
+//返回   这里返回的东西不严谨，按道理来讲，登录成功以后，只返回token，不会有其它的数据
+//而其它的用户数据，需要重新根据token发请求获取（token校验）
+
+// data:{
+//   nickName:"Administrator",
+//   name:"Admin",
+//   token: 90aa16f24d04c7d882051412f9ec45b"
+//   }
+
+export const reqUserLogin = (userInfo) => {
+  return request({
+    url:'/user/passport/login',
+    method:'post',
+    data:userInfo
+  })
+}
+  
+
+//根据token请求获取用户的信息
+///api/user/passport/auth/getUserInfo
+//参数token已经在请求头当中添加了
+//get
+
+export const reqGetUserInfo = () => {
+  return request({
+    url:'/user/passport/auth/getUserInfo',
+    method:'get'
+  })
+}
+
+
+//请求退出登录
+///api/user/passport/logout
+//get
+
+export const reqUserLogout = () => {
+  return request({
+    url:'/user/passport/logout',
+    method:'get'
+  })
+}
+
+
 
 
 
