@@ -200,6 +200,53 @@ export const reqUserLogout = () => {
   })
 }
 
+//请求获取用户的收货地址信息
+///api/user/userAddress/auth/findUserAddressList
+//get
+
+export const reqUserAddressList = () => {
+  return request({
+    url:'/user/userAddress/auth/findUserAddressList',
+    method:'get'
+  })
+}
+
+//请求获取订单交易页面信息
+///api/order/auth/trade
+//get
+
+export const reqTradeInfo = () => {
+  return request({
+    url:'/order/auth/trade',
+    method:'get'
+  })
+}
+
+
+// reqUserAddress()
+// reqTradeInfo()
+
+//请求提交创建订单
+///api/order/auth/submitOrder?tradeNo={tradeNo}
+//post
+
+export const reqSubmitOrder = (tradeNo,tradeInfo) => {
+  return request({
+    url:`/order/auth/submitOrder?tradeNo=${tradeNo}`,
+    method:'post',
+    data:tradeInfo
+  })
+}
+
+//请求获取支付信息
+// /api/payment/weixin/createNative/{orderId}
+//get
+export const reqPayInfo = (orderId) => {
+  return request({
+    url:`/payment/weixin/createNative/${orderId}`,
+    method:'get'
+  })
+}
 
 
 
@@ -208,7 +255,11 @@ export const reqUserLogout = () => {
 
 
 
+// 最终暴露的是
+// {
+//   reqSubmitOrder,
+//   reqTradeInfo
+// }
 
-
-
+// import * as API from '@/api'
 

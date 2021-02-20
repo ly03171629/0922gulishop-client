@@ -109,7 +109,6 @@
                     </strong>
                   </div>
                   <div class="attr">
-
                     <router-link :to="'/detail/'+goods.id">
                       {{ goods.title }}
                     </router-link>
@@ -143,7 +142,7 @@
             :total="searchInfo.total"
             :pageSize="searchParams.pageSize"
             :continueNo="5"
-
+            
             @changePageNo="changePageNo"
           ></Pagination>
           <!-- element-ui -->
@@ -273,6 +272,8 @@ export default {
 
       this.searchParams = searchParams;
     },
+
+
     // 删除分类名称搜索条件，重新发送请求
     removeCategoryName() {
       this.searchParams.category3Id = undefined;
@@ -350,6 +351,9 @@ export default {
       this.searchParams.pageNo = 1
       this.getSearchInfo();
     },
+
+
+
     //点击综合或者价格的排序回调
     changeSort(sortFlag) {
       //首先我们得判断用户点击的是不是和原来的排序标志一样
@@ -369,8 +373,6 @@ export default {
         //假设用户点击的排序标志和原来的是不一样的，证明点击的不是同一个排序，那么我们需要把排序标志改变，排序类型默认
         newOrder = `${sortFlag}:desc`;
       }
-
-
 
       this.searchParams.order = newOrder; //把排序规则的数据修改
       this.searchParams.pageNo = 1

@@ -7,6 +7,7 @@ import home from './home'
 import search from './search'
 import detail from './detail'
 import shopcart from './shopcart'
+import trade from './trade'
 
 
 //vuex当中的4个核心概念  
@@ -41,6 +42,13 @@ export default new Vuex.Store({
     home,
     search,
     detail,
-    shopcart
+    shopcart,
+    trade
   }
 })
+
+//最终暴露
+// {
+//   default:store
+// }
+
