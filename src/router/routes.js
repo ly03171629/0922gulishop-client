@@ -8,8 +8,29 @@ import ShopCart from '@/pages/ShopCart'
 import Trade from '@/pages/Trade'
 import Pay from '@/pages/Pay'
 import PaySuccess from '@/pages/PaySuccess'
+import Center from '@/pages/Center'
+import MyOrder from '@/pages/Center/MyOrder'
+import GroupOrder from '@/pages/Center/GroupOrder'
 
 export default [
+  {
+    path:'/center',
+    component:Center,
+    children:[
+      {
+        path:'myorder',
+        component:MyOrder
+      },
+      {
+        path:'grouporder',
+        component:GroupOrder
+      },
+      {
+        path:'',
+        redirect: 'myorder'
+      }
+    ]
+  },
   {
     path:'/trade',
     component:Trade

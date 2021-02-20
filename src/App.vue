@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <el-button type="danger" icon="el-icon-delete"></el-button> -->
     <Header></Header>
     <router-view></router-view>
     <!-- 这样写是可以的，但是如果后期有很多的页面都不需要显示footer，那么这里面就会写很长 -->

@@ -10,6 +10,18 @@ import '@/mock/mockServer'  //引入mockServer，让模拟的接口生效
 
 import * as API from '@/api' //直接获取接口请求函数文件暴露出来的对象
 
+import { Button,MessageBox,Message } from 'element-ui';
+//element-ui当中分为两种组件
+// 第一种组件就和下面这个Button一样，可以引入然后全局注册
+// Vue.use(Button)
+Vue.component(Button.name,Button)
+// 第二种组件就和MessageBox类似，引入之后不能直接注册，而是挂载Vue的原型上使用
+// Vue.prototype.$loading = Loading.service;
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$message = Message;  //用来做提示消息，比alert要好看
+
+
 
 //无论什么样的暴露方式，往外暴露的都是一个对象
 //只不过，暴露的对象形成方式不一样
