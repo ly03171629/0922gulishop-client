@@ -1,5 +1,9 @@
-import Home from '@/pages/Home'
-import Search from '@/pages/Search'
+// import Home from '@/pages/Home'
+
+const Home = () => import('@/pages/Home')//import函数可以让文件单独打包，并且动态加载
+const Search = () => import('@/pages/Search')//import函数可以让文件单独打包，并且动态加载
+
+// import Search from '@/pages/Search'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Detail from '@/pages/Detail'
@@ -11,6 +15,17 @@ import PaySuccess from '@/pages/PaySuccess'
 import Center from '@/pages/Center'
 import MyOrder from '@/pages/Center/MyOrder'
 import GroupOrder from '@/pages/Center/GroupOrder'
+
+//使用import  from 这样的方式是同步执行，将所有的路由组件一次性打包在一个大的文件当中
+//这样打包之后，打包出来的文件体积比较大，当浏览器在访问这个文件加载的时候，效率不高
+
+//所以我们就想办法将所有的路由组件，分别打包为一个小的文件
+//浏览器在访问哪个组件的时候，再去加载哪一个小的文件，效率就会提升
+
+//这个过程就是我们所说的路由懒加载
+
+
+
 import store from '@/store'
 
 export default [
@@ -99,6 +114,8 @@ export default [
   {
     path:'/home',
     component:Home
+    //component后面可以是一个组件，也可以是一个函数
+    //这个函数当用户第一次访问Home组件的时候，就会执行Home函数
   },
   {
     path:'/search/:keyword?', //?代表我的params参数可传可不传
