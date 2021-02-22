@@ -99,7 +99,15 @@ router.beforeEach(async (to, from, next) => {
   }else{
     //用户根本没登录，
     //目前我们什么都不做，直接放行，后面我们是需要添加功能的
-    next()
+    //如果用户访问的是 交易相关  支付相关 个人中心相关，那么跳转到登录页面
+    let targetPath = to.path
+    if(targetPath.indexOf('/trade')!==-1 || targetPath.indexOf('/pay')!==-1 || targetPath.startsWith('/center')){
+      // next('/login') 这样写可以直接去到登录页，但是登录成功不会去到之前想去的地方
+      next('/login?redirect='+targetPath) //想要回到之前想去的地方，必须把想去的那个路径给带到登录里面  
+    }else{
+      next()
+    }
+    
   }
 
 })

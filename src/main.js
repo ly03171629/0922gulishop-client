@@ -12,10 +12,10 @@ import * as API from '@/api' //直接获取接口请求函数文件暴露出来�
 
 import { Button,MessageBox,Message } from 'element-ui';
 //element-ui当中分为两种组件
-// 第一种组件就和下面这个Button一样，可以引入然后全局注册
+// 第一种组件就和下面这个Button一样，可以引入然后全局注册,使用的时候直接写标签
 // Vue.use(Button)
 Vue.component(Button.name,Button)
-// 第二种组件就和MessageBox类似，引入之后不能直接注册，而是挂载Vue的原型上使用
+// 第二种组件就和MessageBox类似，引入之后不能直接注册，而是挂载Vue的原型上使用，使用的时候写的js代码
 // Vue.prototype.$loading = Loading.service;
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
@@ -85,9 +85,12 @@ import TypeNav from '@/components/TypeNav'
 import SlideLoop from  '@/components/SlideLoop'
 import Pagination from '@/components/Pagination'
 //全局注册的组件，如果一个非路由组件被多个组件使用，那么定义在components，注册在全局
-Vue.component('TypeNav',TypeNav)
+// Vue.component('TypeNav',TypeNav)
+Vue.component(TypeNav.name,TypeNav)
+
 Vue.component('SlideLoop',SlideLoop)
-Vue.component('Pagination',Pagination)
+// Vue.component('Pagination',Pagination)
+Vue.component(Pagination.name,Pagination)
 
 // @是一个别名，是个小名  代表的就是我们的src的路径
 Vue.config.productionTip = false

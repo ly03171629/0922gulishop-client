@@ -122,6 +122,31 @@ export default {
       message: "", //收集用户输入的留言信息
     };
   },
+  //组件内守卫
+  //组件内守卫，它的执行时机是在created之前的，也就是说组件还没创建呢
+  //因此如果这个守卫内部使用到this，不能直接使用
+  //如果你非要使用组件对象实例，那么在守卫当中得传一个回调函数
+  // next(vm => {
+  //   // 通过 `vm` 访问组件实例
+  // })
+
+  // beforeRouteEnter(to, from, next) {
+  //   // 在渲染该组件的对应路由被 confirm 前调用
+  //   // 不！能！获取组件实例 `this`
+  //   // 因为当守卫执行前，组件实例还没被创建
+
+  //   next((vm) => {
+  //     //vm就是你的this
+  //     if (from.path === "/shopcart") {
+  //       let message = vm.message;
+  //       next();
+  //     } else {
+  //       alert("只有从购物车界面才能跳转到交易页面（创建订单");
+  //       next(false);
+  //     }
+  //   });
+  // },
+
   mounted() {
     this.getUserAddressList();
     this.getTradeInfo();
@@ -154,12 +179,12 @@ export default {
         orderComment: this.message,
         orderDetailList: this.detailArrayList,
       };
-      const result = await this.$API.reqSubmitOrder(tradeNo,tradeInfo);
-      if(result.code === 200){
+      const result = await this.$API.reqSubmitOrder(tradeNo, tradeInfo);
+      if (result.code === 200) {
         //请求成功会返回订单编号
-        alert('创建订单成功，准备去往支付页面')
+        alert("创建订单成功，准备去往支付页面");
         //可以跳转到支付页面，需要把返回的订单编号给带上
-        this.$router.push('/pay?orderNum='+ result.data)
+        this.$router.push("/pay?orderNum=" + result.data);
       }
     },
   },

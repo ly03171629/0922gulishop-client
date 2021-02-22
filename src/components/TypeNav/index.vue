@@ -160,7 +160,7 @@ import { mapGetters, mapState } from "vuex";
 import throttle from "lodash/throttle";
 
 export default {
-  name: "",
+  name: "TypeNav",
   data() {
     return {
       currentIndex: -1,
