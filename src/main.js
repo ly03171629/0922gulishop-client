@@ -10,7 +10,7 @@ import '@/mock/mockServer'  //引入mockServer，让模拟的接口生效
 
 import * as API from '@/api' //直接获取接口请求函数文件暴露出来的对象
 
-import { Button,MessageBox,Message } from 'element-ui';
+import { Button,MessageBox,Message,Input } from 'element-ui';
 
 import '@/utils/validate'  //引入vee-validate相关配置
 
@@ -29,6 +29,7 @@ Vue.use(VueLazyload, { // 内部自定义了一个指令lazy
 // 第一种组件就和下面这个Button一样，可以引入然后全局注册,使用的时候直接写标签
 // Vue.use(Button)
 Vue.component(Button.name,Button)
+Vue.component(Input.name,Input)
 // 第二种组件就和MessageBox类似，引入之后不能直接注册，而是挂载Vue的原型上使用，使用的时候写的js代码
 // Vue.prototype.$loading = Loading.service;
 Vue.prototype.$msgbox = MessageBox;
