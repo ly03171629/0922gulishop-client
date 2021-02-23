@@ -1,6 +1,9 @@
 <template>
   <ul>
-    <li v-for="(item, index) in data" :key="index">{{item.text}}</li>
+    <li v-for="(todo, index) in todos" :key="index">
+      <!-- :todo="todo" 不是props组件通信,作用域插槽通信 -->
+      <slot :todo="todo" :index="index">{{todo.text}}</slot>
+    </li>
   </ul>
 </template>
 
@@ -8,7 +11,7 @@
 export default {
   name: 'List',
   props: {
-    data: Array
+    todos: Array
   }
 }
 </script>
